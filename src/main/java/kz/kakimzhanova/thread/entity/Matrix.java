@@ -91,12 +91,6 @@ public class Matrix {
             }
             s.append("\n");
         }
-        s.append("modified: ");
-        for (int i = 0; i < this.getSize(); i++){
-            s.append(isModified(i,i));
-            s.append(" ");
-        }
-        s.append("\n");
         return s.toString();
     }
 }

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Level;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 
@@ -33,13 +34,15 @@ public class Worker extends java.lang.Thread{
         MatrixModificator matrixModificator = new MatrixModificator();
         while (matrixModificator.modifyMatrix(this.threadId, matrixModificator.findNextField())) {
             try {
-                cyclicBarrier.await();
+                cyclicBarrier.await(1, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
                 logger.log(Level.WARN, e);
             } catch (BrokenBarrierException e) {
                 logger.log(Level.WARN, e);
+            } catch (TimeoutException e) {
+                logger.log(Level.WARN, e);
+                return;
             }
         }
-        logger.log(Level.INFO, ""+ threadId + "finish \n" );
     }
 }
