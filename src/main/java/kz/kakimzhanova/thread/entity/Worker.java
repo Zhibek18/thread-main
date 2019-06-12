@@ -31,8 +31,7 @@ public class Worker extends java.lang.Thread{
             logger.log(Level.WARN, e);
         }
         MatrixModificator matrixModificator = new MatrixModificator();
-        while (!finish.get()) {
-            finish.set(!matrixModificator.modifyMatrix(this.threadId));
+        while (matrixModificator.modifyMatrix(this.threadId, matrixModificator.findNextField())) {
             try {
                 cyclicBarrier.await();
             } catch (InterruptedException e) {
@@ -41,5 +40,6 @@ public class Worker extends java.lang.Thread{
                 logger.log(Level.WARN, e);
             }
         }
+        logger.log(Level.INFO, ""+ threadId + "finish \n" );
     }
 }

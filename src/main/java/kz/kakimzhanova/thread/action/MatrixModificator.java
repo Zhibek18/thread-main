@@ -1,6 +1,7 @@
 package kz.kakimzhanova.thread.action;
 
 import kz.kakimzhanova.thread.entity.Matrix;
+import kz.kakimzhanova.thread.entity.MatrixField;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,22 +13,28 @@ public class MatrixModificator {
     private static Logger logger = LogManager.getLogger();
     private static Lock lock = new ReentrantLock();
 
-    public boolean modifyMatrix(int threadId){ // returns true if matrix was modified, otherwise returns false
+    public boolean modifyMatrix(int threadId, MatrixField field){ // returns true if matrix was modified, otherwise returns false
 
         Matrix matrix = Matrix.getInstance();
-        lock.lock();
-        try {
-            for (int i = 0; i < matrix.getSize(); i++) {
-                if (!matrix.isModified(i, i)) {
-                    matrix.setValue(i, i, threadId);
-                    logger.log(Level.INFO, " " + threadId + " matrix[" + i + "][" + i + "] was modified");
-                    return true;
-                }
-            }
-            logger.log(Level.INFO, " " + threadId + " no fields to be modified");
-            return false;
-        } finally {
-        lock.unlock();
+        if ((field != null) && (!field.isModified())){
+            field.setElem(threadId);
+            field.setModified(true);
+            field.setModifiedBy(threadId);
+            logger.log(Level.INFO, " " + threadId + " matrix[" + field.getI() + "][" + field.getJ() + "] was modified");
+            return true;
         }
+        logger.log(Level.INFO, " " + threadId + " no fields to be modified");
+        return false;
+    }
+
+    public MatrixField findNextField(){
+        Matrix matrix = Matrix.getInstance();
+        lock.lock();
+        try{
+           return matrix.popListElem();
+        } finally {
+            lock.unlock();
+        }
+
     }
 }

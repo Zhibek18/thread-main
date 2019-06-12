@@ -4,6 +4,8 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
@@ -15,6 +17,7 @@ public class Matrix {
     private static final int N = 5;
     private static Matrix instance;
     private MatrixField [][] matrix;
+    private List<MatrixField> matrixFieldList = new ArrayList<MatrixField>();
     private static Lock lock = new ReentrantLock(true);
     private static AtomicBoolean created = new AtomicBoolean(false);
 
@@ -22,7 +25,8 @@ public class Matrix {
         matrix = new MatrixField[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                matrix[i][j] = new MatrixField(0);
+                matrix[i][j] = new MatrixField(0, i, j);
+                matrixFieldList.add(matrix[i][j]);
             }
         }
     }
@@ -69,6 +73,14 @@ public class Matrix {
         }
     }
 
+    public MatrixField popListElem(){
+        MatrixField res = null;
+        if (matrixFieldList.size() != 0) {
+            res = matrixFieldList.get(0);
+            matrixFieldList = matrixFieldList.subList(1, matrixFieldList.size());
+        }
+        return res;
+    }
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("\n");
