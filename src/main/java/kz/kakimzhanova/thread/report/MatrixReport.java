@@ -10,6 +10,4 @@ public class MatrixReport {
     public void printReport(){
         logger.log(Level.INFO, Matrix.getInstance().toString());
     }
-
-
 }

@@ -18,7 +18,7 @@ public class MatrixModificator {
         lock.lock();
         try {
             for (int i = 0; i < matrix.getSize(); i++) {
-                if (!matrix.isModified(i)) {
+                if (!matrix.isModified(i, i)) {
                     matrix.setValue(i, i, threadId);
                     logger.log(Level.INFO, " " + threadId + " matrix[" + i + "][" + i + "] was modified");
                     return true;

@@ -12,21 +12,19 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Matrix {
     private static Logger logger = LogManager.getLogger();
 
-    private final static int N = 5;
+    private static final int N = 5;
     private static Matrix instance;
-    private int[][] matrix;
-    private boolean [] modified;
+    private MatrixField [][] matrix;
     private static Lock lock = new ReentrantLock(true);
     private static AtomicBoolean created = new AtomicBoolean(false);
 
     private Matrix(){
-        matrix = new int[N][N];
+        matrix = new MatrixField[N][N];
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                matrix[i][j] = 0;
+                matrix[i][j] = new MatrixField(0);
             }
         }
-        modified = new boolean[N];
     }
 
     public static Matrix getInstance(){
@@ -45,9 +43,8 @@ public class Matrix {
         return instance;
     }
 
-    public void setValue(int i, int j, int value) {
-        matrix[i][j] = value;
-        modified[i] = true;
+    public void setValue(int i, int j, int threadId) {
+        matrix[i][j].setElem(threadId);
         try {
             TimeUnit.SECONDS.sleep(1);
         } catch (InterruptedException e) {
@@ -56,17 +53,17 @@ public class Matrix {
     }
 
     public int getValue(int i, int j){
-        return matrix[i][j];
+        return matrix[i][j].getElem();
     }
 
     public int getSize(){
         return matrix.length;
     }
 
-    public boolean isModified(int i) {
+    public boolean isModified(int i, int j) {
         lock.lock();
         try {
-            return modified[i];
+            return matrix[i][j].isModified();
         }finally {
             lock.unlock();
         }
@@ -84,7 +81,7 @@ public class Matrix {
         }
         s.append("modified: ");
         for (int i = 0; i < this.getSize(); i++){
-            s.append(isModified(i));
+            s.append(isModified(i,i));
             s.append(" ");
         }
         s.append("\n");
