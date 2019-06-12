@@ -45,16 +45,13 @@ public class Matrix {
         return instance;
     }
 
-    public void setValue(int i, int j, int value){
-        lock.lock();
+    public void setValue(int i, int j, int value) {
+        matrix[i][j] = value;
+        modified[i] = true;
         try {
-            matrix[i][j] = value;
-            modified[i] = true;
             TimeUnit.SECONDS.sleep(1);
-        }catch (InterruptedException e){
+        } catch (InterruptedException e) {
             logger.log(Level.WARN, e);
-        }finally {
-            lock.unlock();
         }
     }
 
@@ -69,7 +66,6 @@ public class Matrix {
     public boolean isModified(int i) {
         lock.lock();
         try {
-            //return modified[i].get();
             return modified[i];
         }finally {
             lock.unlock();
