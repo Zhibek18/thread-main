@@ -46,4 +46,9 @@ public class MatrixField {
     public boolean isModified(){
         return modified;
     }
+
+    @Override
+    public String toString() {
+        return  "elem=" + elem;
+    }
 }

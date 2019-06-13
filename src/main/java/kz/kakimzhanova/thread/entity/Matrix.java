@@ -1,12 +1,14 @@
 package kz.kakimzhanova.thread.entity;
 
+import kz.kakimzhanova.thread.exception.WrongInputDataException;
+import kz.kakimzhanova.thread.reader.Reader;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -21,16 +23,32 @@ public class Matrix {
     private static Lock lock = new ReentrantLock(true);
     private static AtomicBoolean created = new AtomicBoolean(false);
 
-    private Matrix(){
-        matrix = new MatrixField[N][N];
+    private Matrix() {
+        Reader reader = new Reader( N, "res.txt");
+        try {
+            matrix = reader.readMatrix();
+            for (int i = 0; i < N; i++){
+                for (int j = 0; j < N; j++){
+                    logger.log(Level.DEBUG, matrix[i][j]);
+                }
+            }
+
+            setList();
+        } catch (WrongInputDataException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setList(){
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                matrix[i][j] = new MatrixField(0, i, j);
+
                 matrixFieldList.add(matrix[i][j]);
             }
         }
     }
-
     public static Matrix getInstance(){
         if (!created.get()) {
             lock.lock();
@@ -47,40 +65,27 @@ public class Matrix {
         return instance;
     }
 
-    public void setValue(int i, int j, int threadId) {
-        matrix[i][j].setElem(threadId);
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException e) {
-            logger.log(Level.WARN, e);
-        }
-    }
-
     public int getValue(int i, int j){
         return matrix[i][j].getElem();
     }
 
-    public int getSize(){
-        return matrix.length;
-    }
-
-    public boolean isModified(int i, int j) {
-        lock.lock();
-        try {
-            return matrix[i][j].isModified();
-        }finally {
-            lock.unlock();
+    public int getSize() {
+        if (matrix != null) {
+            return matrix.length;
+        } else {
+            return 0;
         }
     }
 
     public MatrixField popListElem(){
         MatrixField res = null;
-        if (matrixFieldList.size() != 0) {
+        if (!matrixFieldList.isEmpty()) {
             res = matrixFieldList.get(0);
             matrixFieldList = matrixFieldList.subList(1, matrixFieldList.size());
         }
         return res;
     }
+
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("\n");
