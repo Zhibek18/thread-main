@@ -1,6 +1,7 @@
 package kz.kakimzhanova.thread.entity;
 
-import kz.kakimzhanova.thread.action.MatrixModificator;
+import kz.kakimzhanova.thread.action.finder.MatrixFieldFinder;
+import kz.kakimzhanova.thread.action.modificator.MatrixModificator;
 import kz.kakimzhanova.thread.util.IdGenerator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -10,20 +11,18 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 
 public class Worker extends java.lang.Thread{
     private static Logger logger = LogManager.getLogger();
     private static CyclicBarrier cyclicBarrier;
-    private static AtomicBoolean finish = new AtomicBoolean(false);
     private int threadId;
 
     public Worker (CyclicBarrier barrier){
         this.threadId = IdGenerator.generateThreadId();
-        this.cyclicBarrier = barrier;
+        cyclicBarrier = barrier;
     }
 
+    @Override
     public void run(){
         logger.log(Level.INFO, " " + this.threadId);
         try {
@@ -32,7 +31,8 @@ public class Worker extends java.lang.Thread{
             logger.log(Level.WARN, e);
         }
         MatrixModificator matrixModificator = new MatrixModificator();
-        while (matrixModificator.modifyMatrix(this.threadId, matrixModificator.findNextField())) {
+        MatrixFieldFinder fieldFinder = new MatrixFieldFinder();
+        while (matrixModificator.modifyMatrix(this.threadId, fieldFinder.findNextField())) {
             try {
                 cyclicBarrier.await(1, TimeUnit.SECONDS);
             } catch (InterruptedException e) {

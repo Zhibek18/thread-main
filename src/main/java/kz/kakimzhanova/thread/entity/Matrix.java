@@ -18,8 +18,8 @@ public class Matrix {
 
     private static final int N = 5;
     private static Matrix instance;
-    private MatrixField [][] matrix;
-    private List<MatrixField> matrixFieldList = new ArrayList<MatrixField>();
+    private Field[][] matrix;
+    private List<Field> matrixFieldList = new ArrayList<Field>();
     private static Lock lock = new ReentrantLock(true);
     private static AtomicBoolean created = new AtomicBoolean(false);
 
@@ -35,16 +35,15 @@ public class Matrix {
 
             setList();
         } catch (WrongInputDataException e) {
-            e.printStackTrace();
+            logger.log(Level.WARN, e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARN, e);
         }
     }
 
     private void setList(){
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-
                 matrixFieldList.add(matrix[i][j]);
             }
         }
@@ -77,8 +76,8 @@ public class Matrix {
         }
     }
 
-    public MatrixField popListElem(){
-        MatrixField res = null;
+    public Field popListElem(){
+        Field res = null;
         if (!matrixFieldList.isEmpty()) {
             res = matrixFieldList.get(0);
             matrixFieldList = matrixFieldList.subList(1, matrixFieldList.size());

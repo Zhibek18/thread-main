@@ -1,13 +1,13 @@
 package kz.kakimzhanova.thread.entity;
 
-public class MatrixField {
+public class Field {
     private int elem;
     private int i = -1;
     private int j = -1;
     private int modifiedBy = 0;
     private boolean modified = false;
 
-    public MatrixField(int elem, int i, int j){
+    public Field(int elem, int i, int j){
         this.elem = elem;
         this.i = i;
         this.j = j;

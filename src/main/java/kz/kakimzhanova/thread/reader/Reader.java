@@ -1,6 +1,6 @@
 package kz.kakimzhanova.thread.reader;
 
-import kz.kakimzhanova.thread.entity.MatrixField;
+import kz.kakimzhanova.thread.entity.Field;
 import kz.kakimzhanova.thread.exception.WrongInputDataException;
 
 import java.io.BufferedReader;
@@ -9,18 +9,18 @@ import java.io.IOException;
 
 public class Reader {
     private String fileName;
-    private static int N;
+    private static int size;
 
-    public Reader (int N, String dataFileName){
+    public Reader (int n, String dataFileName){
         this.fileName = dataFileName;
-        this.N = N;
+        size = n;
     }
-    public MatrixField[][] readMatrix() throws IOException, WrongInputDataException {
+    public Field[][] readMatrix() throws IOException, WrongInputDataException {
         BufferedReader br;
         br = new BufferedReader(new FileReader("/home/sam/thread/src/main/resources/" + fileName));
 
-        MatrixField[][] matrix;
-        matrix = new MatrixField[N][N];
+        Field[][] matrix;
+        matrix = new Field[size][size];
 
         try {
             String tmp;
@@ -28,23 +28,23 @@ public class Reader {
             int j = 0;
             int k;
             while ((tmp = br.readLine()) != null) {
-                if (i >= N){
-                    throw new WrongInputDataException ("matrix size should be "+ N +"x"+ N);
+                if (i >= size){
+                    throw new WrongInputDataException ("matrix size should be "+ size +"x"+ size);
                 }
                 String[] s = tmp.split("\\s");
                 j = 0;
                 for (String res : s){
-                    if (j >= N){
-                        throw new WrongInputDataException ("matrix size should be "+ N +"x"+ N);
+                    if (j >= size){
+                        throw new WrongInputDataException ("matrix size should be "+ size +"x"+ size);
                     }
                     k = Integer.parseInt(res);
-                    matrix[i][j] = new MatrixField(k, i, j);
+                    matrix[i][j] = new Field(k, i, j);
                     j++;
                 }
                 i++;
             }
-            if ((i < N) || (j < N)) {
-                throw new WrongInputDataException ("matrix size should be "+ N +"x"+ N);
+            if ((i < size) || (j < size)) {
+                throw new WrongInputDataException ("matrix size should be "+ size +"x"+ size);
             }
             return matrix;
         }finally {
