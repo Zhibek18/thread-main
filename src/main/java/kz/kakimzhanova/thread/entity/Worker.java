@@ -13,13 +13,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Worker extends java.lang.Thread{
+    private static final int WORKERS_COUNT = 6;
     private static Logger logger = LogManager.getLogger();
-    private static CyclicBarrier cyclicBarrier;
+    private static CyclicBarrier cyclicBarrier = new CyclicBarrier(WORKERS_COUNT);
     private int threadId;
 
-    public Worker (CyclicBarrier barrier){
+    public Worker (){
         this.threadId = IdGenerator.generateThreadId();
-        cyclicBarrier = barrier;
     }
 
     @Override
@@ -27,22 +27,20 @@ public class Worker extends java.lang.Thread{
         logger.log(Level.INFO, " " + this.threadId);
         try {
             TimeUnit.SECONDS.sleep(1);
+
+            MatrixModificator matrixModificator = new MatrixModificator();
+            MatrixFieldFinder fieldFinder = new MatrixFieldFinder();
+
+            while (matrixModificator.modifyMatrix(this.threadId, fieldFinder.findNextField())) {
+                cyclicBarrier.await(1, TimeUnit.SECONDS);
+            }
         } catch (InterruptedException e) {
             logger.log(Level.WARN, e);
-        }
-        MatrixModificator matrixModificator = new MatrixModificator();
-        MatrixFieldFinder fieldFinder = new MatrixFieldFinder();
-        while (matrixModificator.modifyMatrix(this.threadId, fieldFinder.findNextField())) {
-            try {
-                cyclicBarrier.await(1, TimeUnit.SECONDS);
-            } catch (InterruptedException e) {
-                logger.log(Level.WARN, e);
-            } catch (BrokenBarrierException e) {
-                logger.log(Level.WARN, e);
-            } catch (TimeoutException e) {
-                logger.log(Level.WARN, e);
-                return;
-            }
+            Thread.currentThread().interrupt();
+        } catch (BrokenBarrierException e) {
+            logger.log(Level.WARN, e);
+        } catch (TimeoutException e) {
+            logger.log(Level.WARN, e);
         }
     }
 }

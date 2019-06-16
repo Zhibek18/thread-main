@@ -6,20 +6,17 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.concurrent.CyclicBarrier;
-
-
 public class Main {
     private static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
-        CyclicBarrier cyclicBarrier = new CyclicBarrier(6);
-        Thread firstThread = new Worker(cyclicBarrier);
-        Thread secondThread = new Worker(cyclicBarrier);
-        Thread thirdThread = new Worker(cyclicBarrier);
-        Thread fourthThread = new Worker(cyclicBarrier);
-        Thread fifthThread = new Worker(cyclicBarrier);
-        Thread sixthThread = new Worker(cyclicBarrier);
+
+        Thread firstThread = new Worker();
+        Thread secondThread = new Worker();
+        Thread thirdThread = new Worker();
+        Thread fourthThread = new Worker();
+        Thread fifthThread = new Worker();
+        Thread sixthThread = new Worker();
         try{
             firstThread.start();
             secondThread.start();
@@ -37,6 +34,7 @@ public class Main {
 
         } catch (InterruptedException e) {
             logger.log(Level.WARN, e);
+            Thread.currentThread().interrupt();
         }
         MatrixReport report = new MatrixReport();
         report.printReport();

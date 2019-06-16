@@ -1,7 +1,9 @@
 package kz.kakimzhanova.thread.util;
 
 public class IdGenerator {
-    static int threadId = 1;
+    private static int threadId = 1;
+
+    private IdGenerator(){ }
     public static int generateThreadId(){
         return threadId++;
     }

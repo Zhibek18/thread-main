@@ -8,8 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class Reader {
+    private static final String WRONG_INPUT_MSG =  "Matrix size should be ";
     private String fileName;
-    private static int size;
+    private int size;
 
     public Reader (int n, String dataFileName){
         this.fileName = dataFileName;
@@ -29,13 +30,13 @@ public class Reader {
             int k;
             while ((tmp = br.readLine()) != null) {
                 if (i >= size){
-                    throw new WrongInputDataException ("matrix size should be "+ size +"x"+ size);
+                    throw new WrongInputDataException (WRONG_INPUT_MSG+ size +"x"+ size);
                 }
                 String[] s = tmp.split("\\s");
                 j = 0;
                 for (String res : s){
                     if (j >= size){
-                        throw new WrongInputDataException ("matrix size should be "+ size +"x"+ size);
+                        throw new WrongInputDataException (WRONG_INPUT_MSG+ size +"x"+ size);
                     }
                     k = Integer.parseInt(res);
                     matrix[i][j] = new Field(k, i, j);
@@ -44,7 +45,7 @@ public class Reader {
                 i++;
             }
             if ((i < size) || (j < size)) {
-                throw new WrongInputDataException ("matrix size should be "+ size +"x"+ size);
+                throw new WrongInputDataException (WRONG_INPUT_MSG+ size +"x"+ size);
             }
             return matrix;
         }finally {
