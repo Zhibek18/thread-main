@@ -13,10 +13,10 @@ public class MatrixModificator {
             field.setElem(threadId);
             field.setModified(true);
             field.setModifiedBy(threadId);
-            logger.log(Level.INFO, "Thread: " + threadId + " matrix[" + field.getI() + "][" + field.getJ() + "] was modified");
+            logger.log(Level.INFO, "Worker: " + threadId + " matrix[" + field.getI() + "][" + field.getJ() + "] was modified");
             return true;
         }
-        logger.log(Level.INFO, "Thread: " + threadId + " no fields to be modified");
+        logger.log(Level.INFO, "Worker: " + threadId + " no fields to be modified");
         return false;
     }
 }

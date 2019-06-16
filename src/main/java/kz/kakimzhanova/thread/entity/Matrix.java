@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.Lock;
@@ -18,21 +19,16 @@ public class Matrix {
 
     private static final int N = 5;
     private static Matrix instance;
-    private Field[][] matrix;
-    private List<Field> matrixFieldList = new ArrayList<Field>();
     private static Lock lock = new ReentrantLock(true);
     private static AtomicBoolean created = new AtomicBoolean(false);
+
+    private Field[][] numbers;
+    private List<Field> matrixFieldList = new ArrayList<Field>();
 
     private Matrix() {
         Reader reader = new Reader( N, "res.txt");
         try {
-            matrix = reader.readMatrix();
-            for (int i = 0; i < N; i++){
-                for (int j = 0; j < N; j++){
-                    logger.log(Level.DEBUG, matrix[i][j]);
-                }
-            }
-
+            numbers = reader.readMatrix();
             setList();
         } catch (WrongInputDataException e) {
             logger.log(Level.WARN, e);
@@ -43,9 +39,7 @@ public class Matrix {
 
     private void setList(){
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                matrixFieldList.add(matrix[i][j]);
-            }
+            Collections.addAll(matrixFieldList,numbers[i]);
         }
     }
     public static Matrix getInstance(){
@@ -64,13 +58,13 @@ public class Matrix {
         return instance;
     }
 
-    public int getValue(int i, int j){
-        return matrix[i][j].getElem();
+    private int getValue(int i, int j){
+        return numbers[i][j].getElem();
     }
 
-    public int getSize() {
-        if (matrix != null) {
-            return matrix.length;
+    private int getSize() {
+        if (numbers != null) {
+            return numbers.length;
         } else {
             return 0;
         }
