@@ -1,5 +1,7 @@
 package kz.kakimzhanova.thread.entity;
 
+import kz.kakimzhanova.thread.finder.IndexFinder;
+import kz.kakimzhanova.thread.finder.IndexFinderImpl;
 import kz.kakimzhanova.thread.modifier.MatrixModifier;
 import kz.kakimzhanova.thread.modifier.MatrixModifierImpl;
 import kz.kakimzhanova.thread.util.IdGenerator;
@@ -29,11 +31,10 @@ public class Worker extends Thread{
         int counter = 0;
         try {
             cyclicBarrier.await(1, TimeUnit.SECONDS);
-            Matrix matrix = Matrix.getInstance();
             MatrixModifier matrixModifier = new MatrixModifierImpl();
-            while (matrixModifier.modifyMatrix(this.workerId, matrix.findNextIndex())) {
+            IndexFinder indexFinder = new IndexFinderImpl();
+            while (matrixModifier.modifyMatrix(this.workerId, indexFinder.findNextIndex())) {
                 counter++;
-
                 if (counter <= MODIFIED_FIELDS_COUNT) {
                     cyclicBarrier.await(2, TimeUnit.SECONDS);
                 }

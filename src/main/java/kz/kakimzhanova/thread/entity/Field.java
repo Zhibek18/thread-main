@@ -13,11 +13,11 @@ public class Field {
         this.j = j;
     }
 
-    int getI() {
+    public int getI() {
         return i;
     }
 
-    int getJ() {
+    public int getJ() {
         return j;
     }
 
@@ -38,16 +38,12 @@ public class Field {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append("Field{");
-        s.append("elem=");
         s.append(elem);
-        s.append(", i=");
-        s.append(i);
-        s.append(", j=");
-        s.append(j);
-        s.append(", modifiedBy=");
-        s.append(modifiedBy);
-        s.append('}');
+        if (isModified()) {
+            s.append('(');
+            s.append(modifiedBy);
+            s.append(')');
+        }
         return s.toString();
     }
 }
