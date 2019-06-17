@@ -13,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Worker extends Thread{
+    private static final int MODIFIED_FIELDS_COUNT = 3;
     private static final int WORKERS_COUNT = 6;
     private static Logger logger = LogManager.getLogger();
     private static CyclicBarrier cyclicBarrier = new CyclicBarrier(WORKERS_COUNT);
@@ -25,13 +26,17 @@ public class Worker extends Thread{
     @Override
     public void run(){
         logger.log(Level.INFO, " " + this.workerId + " started");
-
+        int counter = 0;
         try {
-            TimeUnit.SECONDS.sleep(1);
+            cyclicBarrier.await(1, TimeUnit.SECONDS);
             Matrix matrix = Matrix.getInstance();
             MatrixModifier matrixModifier = new MatrixModifierImpl();
             while (matrixModifier.modifyMatrix(this.workerId, matrix.findNextIndex())) {
-                cyclicBarrier.await(1, TimeUnit.SECONDS);
+                counter++;
+
+                if (counter <= MODIFIED_FIELDS_COUNT) {
+                    cyclicBarrier.await(2, TimeUnit.SECONDS);
+                }
             }
         } catch (InterruptedException e) {
             logger.log(Level.WARN, " " + this.workerId + " " +e);

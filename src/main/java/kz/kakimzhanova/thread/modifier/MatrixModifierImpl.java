@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 public class MatrixModifierImpl implements MatrixModifier{
     private static Logger logger = LogManager.getLogger();
 
-    public boolean modifyMatrix(int workerId, int[] index){ // returns true if matrix was modified, otherwise returns false
+    public boolean modifyMatrix(int workerId, int[] index){
         if (index != null) {
             Matrix.getInstance().setMatrixField(index[0], index[1], workerId);
             logger.log(Level.INFO, "Worker: " + workerId + " matrix[" + index[0] + "][" + index[1] + "] was modified");
