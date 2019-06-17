@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Worker extends Thread{
-    private static final int MIN_FIELDS_COUNT = 2;
+    private static final int MIN_MODIFIED_FIELDS_COUNT = 2;
     private static final int WORKERS_COUNT = 6;
     private static Logger logger = LogManager.getLogger();
     private static CyclicBarrier cyclicBarrier = new CyclicBarrier(WORKERS_COUNT);
@@ -40,7 +40,7 @@ public class Worker extends Thread{
             IndexFinder indexFinder = new IndexFinderImpl();
             while (matrixModifier.modifyMatrix(this.workerId, indexFinder.findNextIndex())) {
                 counter++;
-                if (counter <= MIN_FIELDS_COUNT) {
+                if (counter <= MIN_MODIFIED_FIELDS_COUNT) {
                     cyclicBarrier.await(2, TimeUnit.SECONDS);
                 }
             }

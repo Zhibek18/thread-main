@@ -39,12 +39,12 @@ public class Field {
     public String toString() {
         StringBuilder s = new StringBuilder();
         if (isModified()) {
-            s.append('(');
             s.append(modifiedBy);
-            s.append(')');
         }
         else{
+            s.append('(');
             s.append(elem);
+            s.append(')');
         }
         return s.toString();
     }
