@@ -23,6 +23,9 @@ public class Matrix {
         Reader reader = new Reader("res.txt");
         try {
             numbers = reader.readMatrix();
+            int size = numbers[0].length;
+            if  ((size > 12) || (size < 8))
+                throw new WrongInputDataException("Matrix size N should be 8 <= N <= 12");
         } catch (WrongInputDataException e) {
             logger.log(Level.WARN, e);
         } catch (IOException e) {

@@ -38,11 +38,13 @@ public class Field {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(elem);
         if (isModified()) {
             s.append('(');
             s.append(modifiedBy);
             s.append(')');
+        }
+        else{
+            s.append(elem);
         }
         return s.toString();
     }

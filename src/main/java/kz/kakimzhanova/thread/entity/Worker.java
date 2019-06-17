@@ -4,6 +4,7 @@ import kz.kakimzhanova.thread.action.finder.IndexFinder;
 import kz.kakimzhanova.thread.action.finder.IndexFinderImpl;
 import kz.kakimzhanova.thread.action.modifier.MatrixModifier;
 import kz.kakimzhanova.thread.action.modifier.MatrixModifierImpl;
+import kz.kakimzhanova.thread.exception.WrongWorkersCountException;
 import kz.kakimzhanova.thread.util.IdGenerator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -21,8 +22,11 @@ public class Worker extends Thread{
     private static CyclicBarrier cyclicBarrier = new CyclicBarrier(WORKERS_COUNT);
     private int workerId;
 
-    public Worker (){
+    public Worker () throws WrongWorkersCountException{
         this.workerId = IdGenerator.generateWorkerId();
+        if ((WORKERS_COUNT >  6) || (WORKERS_COUNT < 4)){
+            throw new WrongWorkersCountException("Workers count M should be 4 <= M <= 6");
+        }
     }
 
     @Override

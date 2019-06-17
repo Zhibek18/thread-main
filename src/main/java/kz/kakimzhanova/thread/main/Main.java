@@ -1,6 +1,7 @@
 package kz.kakimzhanova.thread.main;
 
 import kz.kakimzhanova.thread.entity.Worker;
+import kz.kakimzhanova.thread.exception.WrongWorkersCountException;
 import kz.kakimzhanova.thread.report.MatrixReport;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -11,13 +12,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Thread firstThread = new Worker();
-        Thread secondThread = new Worker();
-        Thread thirdThread = new Worker();
-        Thread fourthThread = new Worker();
-        Thread fifthThread = new Worker();
-        Thread sixthThread = new Worker();
         try{
+            Thread firstThread = new Worker();
+            Thread secondThread = new Worker();
+            Thread thirdThread = new Worker();
+            Thread fourthThread = new Worker();
+            Thread fifthThread = new Worker();
+            Thread sixthThread = new Worker();
+
             firstThread.start();
             secondThread.start();
             thirdThread.start();
@@ -35,6 +37,8 @@ public class Main {
         } catch (InterruptedException e) {
             logger.log(Level.WARN, e);
             Thread.currentThread().interrupt();
+        } catch (WrongWorkersCountException e) {
+            logger.log(Level.WARN, e);
         }
         MatrixReport report = new MatrixReport();
         report.printReport();
