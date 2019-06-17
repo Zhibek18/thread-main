@@ -2,8 +2,8 @@ package kz.kakimzhanova.thread.entity;
 
 public class Field {
     private int elem;
-    private int i = -1;
-    private int j = -1;
+    private int i;
+    private int j;
     private int modifiedBy = 0;
     private boolean modified = false;
 
@@ -13,11 +13,11 @@ public class Field {
         this.j = j;
     }
 
-    public int getI() {
+    int getI() {
         return i;
     }
 
-    public int getJ() {
+    int getJ() {
         return j;
     }
 
@@ -29,13 +29,13 @@ public class Field {
         this.modified = modified;
     }
 
-    public void setElem(int threadId){
-        this.elem = threadId;
+    void setElem(int workerId){
+        this.elem = workerId;
         this.modified = true;
-        this.modifiedBy = threadId;
+        this.modifiedBy = workerId;
     }
 
-    public int getElem(){
+    int getElem(){
         return elem;
     }
 

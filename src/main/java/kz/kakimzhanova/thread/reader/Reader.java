@@ -12,9 +12,9 @@ public class Reader {
     private String fileName;
     private int size;
 
-    public Reader (int n, String dataFileName){
+    public Reader (int size, String dataFileName){
         this.fileName = dataFileName;
-        size = n;
+        this.size = size;
     }
     public Field[][] readMatrix() throws IOException, WrongInputDataException {
         BufferedReader br;

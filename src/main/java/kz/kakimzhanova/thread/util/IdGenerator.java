@@ -1,10 +1,10 @@
 package kz.kakimzhanova.thread.util;
 
 public class IdGenerator {
-    private static int threadId = 1;
+    private static int workerId = 1;
 
     private IdGenerator(){ }
-    public static int generateThreadId(){
-        return threadId++;
+    public static int generateWorkerId(){
+        return workerId++;
     }
 }

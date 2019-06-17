@@ -16,7 +16,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Matrix {
     private static Logger logger = LogManager.getLogger();
-
     private static final int N = 5;
     private static Matrix instance;
     private static Lock lock = new ReentrantLock(true);
@@ -42,6 +41,7 @@ public class Matrix {
             Collections.addAll(matrixFieldList,numbers[i]);
         }
     }
+
     public static Matrix getInstance(){
         if (!created.get()) {
             lock.lock();
@@ -49,7 +49,6 @@ public class Matrix {
                 if (instance == null) {
                     instance = new Matrix();
                     created.set(true);
-
                 }
             }finally {
                 lock.unlock();
@@ -70,15 +69,27 @@ public class Matrix {
         }
     }
 
-    public Field popListElem(){
-        Field res = null;
-        if (!matrixFieldList.isEmpty()) {
-            res = matrixFieldList.get(0);
-            matrixFieldList = matrixFieldList.subList(1, matrixFieldList.size());
+    int[] findNextIndex(){
+        lock.lock();
+        try {
+            int[] index = null;
+            Field field;
+            if (!matrixFieldList.isEmpty()) {
+                field = matrixFieldList.get(0);
+                matrixFieldList = matrixFieldList.subList(1, matrixFieldList.size());
+                index = new int[2];
+                index[0] = field.getI();
+                index[1] = field.getJ();
+            }
+            return index;
+        }finally {
+            lock.unlock();
         }
-        return res;
     }
 
+    public void setMatrixField(int i, int j, int workerId){
+        numbers[i][j].setElem(workerId);
+    }
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder("\n");
