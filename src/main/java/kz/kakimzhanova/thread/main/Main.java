@@ -1,6 +1,7 @@
 package kz.kakimzhanova.thread.main;
 
 import kz.kakimzhanova.thread.entity.Worker;
+import kz.kakimzhanova.thread.exception.WrongMinModifiedCountException;
 import kz.kakimzhanova.thread.exception.WrongWorkersCountException;
 import kz.kakimzhanova.thread.report.MatrixReport;
 import org.apache.logging.log4j.Level;
@@ -38,6 +39,8 @@ public class Main {
             logger.log(Level.WARN, e);
             Thread.currentThread().interrupt();
         } catch (WrongWorkersCountException e) {
+            logger.log(Level.WARN, e);
+        } catch (WrongMinModifiedCountException e) {
             logger.log(Level.WARN, e);
         }
         MatrixReport report = new MatrixReport();

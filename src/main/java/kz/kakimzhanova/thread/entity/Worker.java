@@ -4,6 +4,7 @@ import kz.kakimzhanova.thread.action.finder.IndexFinder;
 import kz.kakimzhanova.thread.action.finder.IndexFinderImpl;
 import kz.kakimzhanova.thread.action.modifier.MatrixModifier;
 import kz.kakimzhanova.thread.action.modifier.MatrixModifierImpl;
+import kz.kakimzhanova.thread.exception.WrongMinModifiedCountException;
 import kz.kakimzhanova.thread.exception.WrongWorkersCountException;
 import kz.kakimzhanova.thread.util.IdGenerator;
 import org.apache.logging.log4j.Logger;
@@ -16,16 +17,20 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 public class Worker extends Thread{
-    private static final int MIN_MODIFIED_FIELDS_COUNT = 2;
+    private static final int MIN_MODIFIED_FIELDS_COUNT = 3;
     private static final int WORKERS_COUNT = 6;
     private static Logger logger = LogManager.getLogger();
     private static CyclicBarrier cyclicBarrier = new CyclicBarrier(WORKERS_COUNT);
     private int workerId;
 
-    public Worker () throws WrongWorkersCountException{
+    public Worker () throws WrongWorkersCountException, WrongMinModifiedCountException{
         this.workerId = IdGenerator.generateWorkerId();
         if ((WORKERS_COUNT >  6) || (WORKERS_COUNT < 4)){
             throw new WrongWorkersCountException("Workers count M should be 4 <= M <= 6");
+        }
+        double matrixElemCount = Math.pow(Matrix.getInstance().getSize(), 2);
+        if (MIN_MODIFIED_FIELDS_COUNT * WORKERS_COUNT > matrixElemCount){
+            throw new WrongMinModifiedCountException("MIN_MODIFIED_FIELDS_COUNT should be less than " + matrixElemCount);
         }
     }
 
