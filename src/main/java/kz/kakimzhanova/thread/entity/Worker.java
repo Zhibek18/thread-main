@@ -1,6 +1,7 @@
 package kz.kakimzhanova.thread.entity;
 
 import kz.kakimzhanova.thread.modifier.MatrixModifier;
+import kz.kakimzhanova.thread.modifier.MatrixModifierImpl;
 import kz.kakimzhanova.thread.util.IdGenerator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -28,17 +29,17 @@ public class Worker extends Thread{
         try {
             TimeUnit.SECONDS.sleep(1);
             Matrix matrix = Matrix.getInstance();
-            MatrixModifier matrixModifier = new MatrixModifier();
+            MatrixModifier matrixModifier = new MatrixModifierImpl();
             while (matrixModifier.modifyMatrix(this.workerId, matrix.findNextIndex())) {
                 cyclicBarrier.await(1, TimeUnit.SECONDS);
             }
         } catch (InterruptedException e) {
-            logger.log(Level.WARN, e);
+            logger.log(Level.WARN, " " + this.workerId + " " +e);
             Thread.currentThread().interrupt();
         } catch (BrokenBarrierException e) {
-            logger.log(Level.WARN, e);
+            logger.log(Level.WARN, " " + this.workerId + " " +e);
         } catch (TimeoutException e) {
-            logger.log(Level.WARN, e);
+            logger.log(Level.WARN, " " + this.workerId + " " +e);
         }
     }
 }
