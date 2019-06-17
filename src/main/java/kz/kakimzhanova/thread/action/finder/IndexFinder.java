@@ -1,4 +1,4 @@
-package kz.kakimzhanova.thread.finder;
+package kz.kakimzhanova.thread.action.finder;
 
 public interface IndexFinder {
     int[] findNextIndex();

@@ -1,4 +1,4 @@
-package kz.kakimzhanova.thread.modifier;
+package kz.kakimzhanova.thread.action.modifier;
 
 import kz.kakimzhanova.thread.entity.Matrix;
 import org.apache.logging.log4j.Level;

@@ -13,7 +13,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Matrix {
     private static Logger logger = LogManager.getLogger();
-    private static final int N = 5;
     private static Matrix instance;
     private static Lock lock = new ReentrantLock(true);
     private static AtomicBoolean created = new AtomicBoolean(false);
@@ -21,7 +20,7 @@ public class Matrix {
     private Field[][] numbers;
 
     private Matrix() {
-        Reader reader = new Reader( N, "res.txt");
+        Reader reader = new Reader("res.txt");
         try {
             numbers = reader.readMatrix();
         } catch (WrongInputDataException e) {

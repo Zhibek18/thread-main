@@ -1,4 +1,4 @@
-package kz.kakimzhanova.thread.modifier;
+package kz.kakimzhanova.thread.action.modifier;
 
 public interface MatrixModifier {
 

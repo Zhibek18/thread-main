@@ -10,20 +10,17 @@ import java.io.IOException;
 public class Reader {
     private static final String WRONG_INPUT_MSG =  "Matrix size should be ";
     private String fileName;
-    private int size;
 
-    public Reader (int size, String dataFileName){
+    public Reader ( String dataFileName){
         this.fileName = dataFileName;
-        this.size = size;
     }
     public Field[][] readMatrix() throws IOException, WrongInputDataException {
         BufferedReader br;
         br = new BufferedReader(new FileReader("/home/sam/thread/src/main/resources/" + fileName));
-
-        Field[][] matrix;
-        matrix = new Field[size][size];
-
         try {
+            int size = Integer.parseInt(br.readLine());
+            Field[][] matrix;
+            matrix = new Field[size][size];
             String tmp;
             int i = 0;
             int j = 0;

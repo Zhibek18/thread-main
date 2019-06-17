@@ -1,4 +1,4 @@
-package kz.kakimzhanova.thread.finder;
+package kz.kakimzhanova.thread.action.finder;
 
 import kz.kakimzhanova.thread.entity.Field;
 import kz.kakimzhanova.thread.entity.FieldsQueue;
